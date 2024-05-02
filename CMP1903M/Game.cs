@@ -4,8 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMP1903_A1_2324
+namespace CMP1903M
 {
+    interface IScoreable
+    {
+        int ScoreDice();
+    }
+    interface ITestable
+    {
+        bool Testing { get; set; }
+    }
     internal class Game
     {
         /*
@@ -19,25 +27,29 @@ namespace CMP1903_A1_2324
         public List<Die> DieList { get; private set; } = new List<Die>();
         public int Total { get; private set; } = 0;
 
+        protected int _score { get; set; } = 0;
+        protected bool _isBot { get; set; } = false;
+        protected bool _isOver { get; set; } = false;
+
 
         //Methods
 
         // <summary>
         // Instantiates the Die objects
         // </summary>
-        public void Instantiate()
+        public void Instantiate(int diceAmt)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < diceAmt; i++)
             {
                 Die die = new Die();
                 DieList.Add(die);
             }
         }
-
+       
         // <summary>
         // Runs the Roll method on all of the Die objects
         // </summary>
-        public void Roll()
+        public void RollAll()
         {
            foreach (Die d in DieList)
            {
@@ -58,9 +70,25 @@ namespace CMP1903_A1_2324
         }
 
         // <summary>
+        // Makes our private score property accessible
+        // </summary>
+        public int GetScore()
+        {
+            return _score;
+        }
+
+        // <summary>
+        // Makes the games status property accessible
+        // </summary>
+        public bool IsOver()
+        {
+            return _isOver;
+        }
+
+        // <summary>
         // Writes the sum of the Die objects in the console
         // </summary>
-        public void Report()
+        virtual public void Report()
         {
             Console.WriteLine($"The sum is {Total}");
         }
@@ -68,13 +96,14 @@ namespace CMP1903_A1_2324
         // <summary>
         // Creates all Die objects, rolls them, sums then up and reports it to the console
         // </summary>
-        public void Play() {
+        virtual public void Play() {
             Console.WriteLine("Rolling..");
-            Instantiate();
-            Roll();
+            Instantiate(3);
+            RollAll();
             Sum();
             Report();
         }
+
 
     }
 }
